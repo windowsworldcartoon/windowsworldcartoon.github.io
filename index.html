@@ -8,34 +8,101 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            text-align: center;
-            padding: 50px;
+            margin: 0;
+            padding: 0;
             background-color: #f4f4f4;
-        }
-        h1 {
             color: #333;
+        }
+        .hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 100px 50px;
+            text-align: center;
+        }
+        .hero h1 {
+            font-size: 3em;
             margin-bottom: 20px;
         }
-        p {
-            font-size: 18px;
-            color: #666;
+        .hero p {
+            font-size: 1.2em;
+            margin-bottom: 30px;
         }
-        a {
+        .hero a {
+            background-color: #fff;
+            color: #667eea;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .hero a:hover {
+            background-color: #e0e0e0;
+        }
+        .projects {
+            padding: 50px;
+            text-align: center;
+        }
+        .projects h2 {
+            font-size: 2.5em;
+            margin-bottom: 40px;
+        }
+        .repos {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            list-style: none;
+            padding: 0;
+        }
+        .repos li {
+            background-color: white;
+            margin: 10px;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            width: 300px;
+        }
+        .repos a {
             color: #0366d6;
             text-decoration: none;
+            font-weight: bold;
         }
-        a:hover {
+        .repos a:hover {
             text-decoration: underline;
         }
     </style>
 </head>
 <body>
-    <h1>Welcome to windowsworldcartoon's GitHub Pages</h1>
-    <p>This is my personal website hosted on GitHub Pages.</p>
-    <p>Explore my projects and repositories on GitHub.</p>
-    <p><a href="https://github.com/windowsworldcartoon">Visit My GitHub Profile</a></p>
+    <div class="hero">
+        <h1>Welcome to windowsworldcartoon's GitHub Pages</h1>
+        <p>This is my personal website hosted on GitHub Pages. Explore my projects and repositories below.</p>
+        <a href="https://github.com/windowsworldcartoon">Visit My GitHub Profile</a>
+    </div>
+    <div class="projects">
+        <h2>My Projects</h2>
+        <ul class="repos">
+            <p>Loading...</p>
+        </ul>
+    </div>
 </body>
 <script>
-    
+    // Fetch and display repositories from GitHub
+    fetch('https://api.github.com/users/windowsworldcartoon/repos?sort=updated&per_page=10')
+        .then(response => response.json())
+        .then(repos => {
+            const ul = document.querySelector('.repos');
+            ul.innerHTML = ''; // Clear static content
+            repos.filter(repo => !repo.private && !repo.fork).forEach(repo => {
+                const li = document.createElement('li');
+                const a = document.createElement('a');
+                a.href = repo.html_url;
+                a.textContent = repo.name;
+                if (repo.description) {
+                    a.textContent += ' - ' + repo.description;
+                }
+                li.appendChild(a);
+                ul.appendChild(li);
+            });
+        })
+        .catch(error => console.error('Error fetching repos:', error));
 </script>
 </html>
